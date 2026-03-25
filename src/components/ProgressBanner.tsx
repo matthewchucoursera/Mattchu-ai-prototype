@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { CircularProgress } from "./CircularProgress";
-import { ASSETS, todaysGoals, weeklyActivityData } from "../data/mockData";
+import { todaysGoals, weeklyActivityData } from "../data/mockData";
 
 // userName removed — greeting now lives in the DigestHeader (App.tsx)
 interface ProgressBannerProps {
   pathName: string;
-  jobDemandPercent: number;
   progressPercent: number;
   courseTitle: string;
   certificateName: string;
@@ -14,7 +13,6 @@ interface ProgressBannerProps {
 
 export function ProgressBanner({
   pathName,
-  jobDemandPercent,
   progressPercent,
   courseTitle,
   certificateName,

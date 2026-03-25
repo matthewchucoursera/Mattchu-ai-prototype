@@ -140,7 +140,6 @@ export default function App() {
           <div className="bg-grey-25 px-16 sm:px-32 pt-24 pb-24">
             <ProgressBanner
               pathName="Grow your product designer skills"
-              jobDemandPercent={12}
               progressPercent={46}
               courseTitle="Share Data Through the Art of Visualization"
               certificateName="Google Data Analytics & E-commerce Professional Certificate"
