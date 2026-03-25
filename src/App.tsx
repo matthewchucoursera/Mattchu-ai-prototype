@@ -195,12 +195,10 @@ export default function App() {
                   </div>
 
                   {/* Recommended for you */}
-                  <div>
-                    <h2 className="cds-subtitle-md text-grey-975 mb-16">
-                      Recommended for you
-                    </h2>
-                    <CourseRow courses={skillRecommendationCourses} />
-                  </div>
+                  <CourseRow
+                    title="Recommended for you"
+                    courses={skillRecommendationCourses}
+                  />
 
                   {/* Recent certificates */}
                   <div>
@@ -211,7 +209,7 @@ export default function App() {
                       {recentCertificates.map((cert, i) => (
                         <div key={cert.id}>
                           {i > 0 && <div className="border-t border-grey-100" />}
-                          <div className="flex items-start gap-24 py-16 rounded-16 -mx-16 px-16 hover:bg-grey-25 transition-colors duration-normal cursor-pointer">
+                          <div className="flex items-start gap-24 pt-8 pb-16 rounded-16 -mx-16 px-16 hover:bg-grey-25 transition-colors duration-normal cursor-pointer">
                             <div className="relative w-64 h-64 rounded-8 bg-grey-50 border border-grey-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                               <img
                                 src={
