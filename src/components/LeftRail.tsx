@@ -22,38 +22,53 @@ export function LeftRail() {
     <aside
       className="hidden md:flex flex-col flex-shrink-0 bg-white border-r border-grey-100 h-screen sticky top-0 overflow-hidden z-40"
       style={{
-        width: isExpanded ? 240 : 64,
+        width: isExpanded ? 240 : 80,
         transition: "width 225ms ease",
       }}
     >
       {/* Logo + collapse toggle */}
-      <div className="flex items-center justify-between px-16 h-64 flex-shrink-0 border-b border-grey-100">
-        {isExpanded ? (
+      {isExpanded ? (
+        <div className="flex items-center justify-between px-16 h-64 flex-shrink-0 border-b border-grey-100 overflow-hidden">
           <img
             src={ASSETS.courseraLogo}
             alt="Coursera"
             className="flex-shrink-0"
             style={{ height: 16, width: 113 }}
           />
-        ) : (
-          <span className="cds-subtitle-md text-blue-700 font-semibold mx-auto select-none">
-            C
-          </span>
-        )}
-        <button
-          type="button"
-          aria-label={isExpanded ? "Collapse navigation" : "Expand navigation"}
-          onClick={() => setIsExpanded((p) => !p)}
-          className={[
-            "flex items-center justify-center w-32 h-32 rounded-full hover:bg-grey-50 text-grey-600 transition-colors duration-fast flex-shrink-0",
-            isExpanded ? "ml-8" : "mx-auto",
-          ].join(" ")}
-        >
-          <span className="material-symbols-rounded" style={{ fontSize: 20 }}>
-            {isExpanded ? "chevron_left" : "chevron_right"}
-          </span>
-        </button>
-      </div>
+          <button
+            type="button"
+            aria-label="Collapse navigation"
+            onClick={() => setIsExpanded(false)}
+            className="flex items-center justify-center w-32 h-32 rounded-full hover:bg-grey-50 text-grey-600 transition-colors duration-fast flex-shrink-0 ml-8"
+          >
+            <span className="material-symbols-rounded" style={{ fontSize: 20 }}>
+              chevron_left
+            </span>
+          </button>
+        </div>
+      ) : (
+        <div className="relative flex items-center h-64 flex-shrink-0 border-b border-grey-100 overflow-hidden">
+          {/* C mark — centered to match nav icons below */}
+          <div className="flex items-center justify-center w-40 mx-auto flex-shrink-0">
+            <img
+              src="/coursera-c-mark.png"
+              alt="Coursera"
+              style={{ width: 32, height: 32, objectFit: "contain" }}
+            />
+          </div>
+          {/* Chevron — absolute so it doesn't shift the C mark */}
+          <button
+            type="button"
+            aria-label="Expand navigation"
+            onClick={() => setIsExpanded(true)}
+            className="absolute right-8 flex items-center justify-center w-32 h-32 rounded-full hover:bg-grey-50 text-grey-600 transition-colors duration-fast"
+          >
+            <span className="material-symbols-rounded" style={{ fontSize: 20 }}>
+              chevron_right
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Search */}
       <div className="px-12 py-12 flex-shrink-0">

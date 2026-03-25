@@ -39,12 +39,6 @@ export function ProgressBanner({
         style={{ animationDelay: "0ms" }}
       >
         <h1 className="cds-title-sm text-grey-975">{pathName}</h1>
-        <div className="flex items-center gap-6 px-12 py-4 rounded-32 bg-grey-975 self-start flex-shrink-0">
-          <img src={ASSETS.rocketIcon} alt="" className="w-16 h-16 flex-shrink-0" />
-          <span className="cds-body-tertiary text-white whitespace-nowrap">
-            +{jobDemandPercent}% job demand
-          </span>
-        </div>
       </div>
 
       {/* Cards row */}
@@ -95,6 +89,19 @@ export function ProgressBanner({
 
         {/* ── Right: goals + weekly activity ── */}
         <div className="flex flex-col gap-12 sm:gap-0 sm:flex-shrink-0 sm:w-[321px] sm:bg-white sm:border sm:border-grey-100 sm:rounded-16 sm:overflow-hidden">
+
+          {/* Fun fact */}
+          <div className="bg-white rounded-16 sm:bg-transparent sm:rounded-none px-16 pt-16 pb-16">
+            <div className="flex items-center gap-8 mb-12">
+              <span className="cds-subtitle-sm text-grey-975">Daily fun fact</span>
+            </div>
+            <p className="cds-body-secondary text-grey-600">
+              The average person will spend about 6 months of their life waiting for red lights to turn green — that&apos;s 1,800 hours of potential learning time.
+            </p>
+          </div>
+
+          {/* Divider — desktop only */}
+          <div className="hidden sm:block border-t border-grey-100" />
 
           {/* Today's goals */}
           <div className="bg-white rounded-16 sm:bg-transparent sm:rounded-none px-16 pt-16 pb-16">
@@ -166,7 +173,6 @@ export function ProgressBanner({
             <p className="cds-body-secondary text-grey-600">
               {weeklyActivityData.message}
             </p>
-
             <div className="flex gap-4">
               {weeklyActivityData.days.map((day, i) => {
                 if (day.completed) {
@@ -204,7 +210,6 @@ export function ProgressBanner({
                 );
               })}
             </div>
-
             <p className="cds-body-tertiary text-grey-600">
               {weeklyActivityData.summary}
             </p>

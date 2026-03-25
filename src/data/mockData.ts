@@ -61,7 +61,6 @@ export const januaryStats = {
 export const todaysGoals = [
   { id: "g1", text: "Complete any 5 learning items", suffix: "· 0/5", boldText: "5 learning items" },
   { id: "g2", text: "Complete 1 practice item", suffix: "", boldText: "" },
-  { id: "g3", text: "Use Coach", suffix: "", boldText: "" },
 ];
 
 export const weeklyActivityData = {
@@ -78,6 +77,41 @@ export const weeklyActivityData = {
   ],
   summary: "3 items completed · 10 minutes learned",
 };
+
+export const leaderboardData = [
+  { rank: 1, name: "Alex M.", points: 320, isYou: false, avatarColor: "bg-green-100 text-green-700" },
+  { rank: 2, name: "Jordan K.", points: 290, isYou: false, avatarColor: "bg-purple-100 text-purple-700" },
+  { rank: 3, name: "You", points: 210, isYou: true, avatarColor: "bg-blue-100 text-blue-700" },
+  { rank: 4, name: "Sam T.", points: 180, isYou: false, avatarColor: "bg-yellow-100 text-yellow-700" },
+];
+
+export const skillDomains = [
+  {
+    id: "data",
+    label: "Data",
+    skills: [
+      { id: "sql", name: "SQL", tier: "Advanced", xp: 2800, xpToNext: 5000 },
+      { id: "data-analysis", name: "Data Analysis", tier: "Intermediate", xp: 1240, xpToNext: 2000 },
+      { id: "data-viz", name: "Data Visualization", tier: "Beginner", xp: 340, xpToNext: 1000 },
+    ],
+  },
+  {
+    id: "programming",
+    label: "Programming",
+    skills: [
+      { id: "python", name: "Python", tier: "Intermediate", xp: 1800, xpToNext: 2000 },
+      { id: "r", name: "R", tier: "Beginner", xp: 200, xpToNext: 1000 },
+    ],
+  },
+  {
+    id: "business",
+    label: "Business",
+    skills: [
+      { id: "project-mgmt", name: "Project Management", tier: "Expert", xp: 4200, xpToNext: 5000 },
+      { id: "communication", name: "Communication", tier: "Advanced", xp: 3100, xpToNext: 5000 },
+    ],
+  },
+];
 
 // ─── Assets ───────────────────────────────────────────────────────────────────
 

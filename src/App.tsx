@@ -4,11 +4,13 @@ import { LeftRail } from "./components/LeftRail";
 import { ProgressBanner } from "./components/ProgressBanner";
 import { CalendarWidget } from "./components/CalendarWidget";
 import { CourseRow } from "./components/CourseRow";
+import { SkillsTab } from "./components/SkillsTab";
 import {
   ASSETS,
   skills,
   recentCertificates,
   skillRecommendationCourses,
+  leaderboardData,
 } from "./data/mockData";
 
 const TABS = ["Overview", "Skills", "In progress", "Saved", "Certificates"] as const;
@@ -64,18 +66,70 @@ export default function App() {
                 4-day streak
               </span>
             </div>
-            {/* AI nudge */}
-            <div className="flex items-center gap-8 px-16 py-8 bg-blue-25 rounded-16">
-              <span
-                className="material-symbols-rounded text-blue-700 flex-shrink-0"
-                style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}
-              >
-                auto_awesome
-              </span>
-              <span className="cds-body-tertiary text-grey-975 whitespace-nowrap">
-                2 weeks ahead of schedule
-              </span>
-            </div>
+
+            {/* Leaderboard chip */}
+            {(() => {
+              const me = leaderboardData.find((e) => e.isYou);
+              if (!me) return null;
+              return (
+                <div className="relative group">
+                  {/* Chip */}
+                  <div className="flex items-center gap-6 px-12 py-6 bg-purple-25 rounded-32 cursor-default select-none">
+                    <span
+                      className="material-symbols-rounded text-purple-700 flex-shrink-0"
+                      style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}
+                    >
+                      emoji_events
+                    </span>
+                    <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue-700 text-white flex-shrink-0" style={{ fontSize: 11, fontWeight: 600 }}>
+                      M
+                    </div>
+                    <span className="cds-body-secondary text-purple-700 whitespace-nowrap">
+                      #{me.rank} · {me.points} pts
+                    </span>
+                  </div>
+
+                  {/* Hover dropdown */}
+                  <div className="absolute right-0 top-full mt-4 w-[232px] bg-white rounded-16 shadow-elevation-2 border border-grey-100 p-12 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-[opacity,transform] duration-normal ease-entrance z-50">
+                    <p className="cds-body-tertiary text-grey-600 mb-8 px-8">This week · Team of 12</p>
+                    <div className="flex flex-col gap-2">
+                      {leaderboardData.map((entry) => (
+                        <div
+                          key={entry.rank}
+                          className={[
+                            "flex items-center gap-8 px-8 py-6 rounded-8",
+                            entry.isYou ? "bg-blue-25" : "",
+                          ].join(" ")}
+                        >
+                          <span className="cds-body-tertiary text-grey-600 w-12 text-right flex-shrink-0">
+                            {entry.rank}
+                          </span>
+                          <div
+                            className={[
+                              "w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0 cds-body-tertiary",
+                              entry.avatarColor,
+                            ].join(" ")}
+                          >
+                            {entry.name[0]}
+                          </div>
+                          <span
+                            className={[
+                              "cds-body-secondary flex-1 min-w-0 truncate",
+                              entry.isYou ? "text-blue-700" : "text-grey-975",
+                            ].join(" ")}
+                          >
+                            {entry.name}
+                          </span>
+                          <span className="cds-body-tertiary text-grey-600 flex-shrink-0">
+                            {entry.points} pts
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </header>
 
@@ -84,7 +138,6 @@ export default function App() {
 
           {/* "Up next" section — grey bg container with the ProgressBanner card inside */}
           <div className="bg-grey-25 px-16 sm:px-32 pt-24 pb-24">
-            <p className="cds-body-tertiary text-grey-600 mb-12">Up next</p>
             <ProgressBanner
               pathName="Grow your product designer skills"
               jobDemandPercent={12}
@@ -96,7 +149,7 @@ export default function App() {
           </div>
 
           {/* ── Tabs + content section ── */}
-          <section className="bg-white">
+          <section className="bg-white min-h-screen">
 
             {/* Tab bar */}
             <div className="border-b border-grey-100">
@@ -123,6 +176,9 @@ export default function App() {
 
             {/* Tab content — remounted on every tab switch for entrance animation */}
             <div key={activeTab} className="px-16 sm:px-32">
+            {activeTab === "Skills" ? (
+                <SkillsTab />
+              ) : (
               <div className="flex flex-col sm:flex-row sm:gap-32 py-24 sm:py-32 animate-entrance">
 
                 {/* ── Left / main column ── */}
@@ -177,21 +233,6 @@ export default function App() {
                         </div>
                       );
                     })}
-                  </div>
-
-                  {/* AI insight */}
-                  <div className="flex items-start gap-12 bg-blue-25 rounded-16 p-16">
-                    <span
-                      className="material-symbols-rounded text-blue-700 flex-shrink-0 mt-2"
-                      style={{ fontSize: 20, fontVariationSettings: "'FILL' 1" }}
-                    >
-                      auto_awesome
-                    </span>
-                    <p className="cds-body-secondary text-grey-975">
-                      Great pace! You&apos;re averaging 52 minutes per session this month.
-                      At this rate, you&apos;ll complete your specialization 2 weeks ahead
-                      of your February 15th goal.
-                    </p>
                   </div>
 
                   {/* Recommended for you */}
@@ -261,6 +302,7 @@ export default function App() {
                   <CalendarWidget />
                 </div>
               </div>
+              )}
             </div>
           </section>
         </main>
