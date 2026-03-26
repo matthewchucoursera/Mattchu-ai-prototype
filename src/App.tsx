@@ -55,15 +55,15 @@ export default function App() {
           </div>
           <div className="flex items-center gap-12">
             {/* Learning streak */}
-            <div className="flex items-center gap-6 px-12 py-6 bg-purple-25 rounded-32">
+            <div className="flex items-center gap-6 px-12 py-6 bg-yellow-50 rounded-32">
               <span
-                className="material-symbols-rounded text-purple-700 flex-shrink-0"
+                className="material-symbols-rounded text-yellow-800 flex-shrink-0"
                 style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}
               >
                 bolt
               </span>
-              <span className="cds-body-secondary text-purple-700 whitespace-nowrap">
-                4-day streak
+              <span className="cds-body-secondary text-yellow-800 whitespace-nowrap">
+                25-day streak
               </span>
             </div>
 
@@ -85,7 +85,7 @@ export default function App() {
                       M
                     </div>
                     <span className="cds-body-secondary text-purple-700 whitespace-nowrap">
-                      #{me.rank} · {me.points} pts
+                      Rank {me.rank}
                     </span>
                   </div>
 
@@ -143,7 +143,6 @@ export default function App() {
               progressPercent={46}
               courseTitle="Share Data Through the Art of Visualization"
               certificateName="Google Data Analytics & E-commerce Professional Certificate"
-              videoSrc={ASSETS.coursePreview}
             />
           </div>
 
@@ -234,9 +233,9 @@ export default function App() {
                     })}
                   </div>
 
-                  {/* Recommended for you */}
+                  {/* Learners like you also took these */}
                   <CourseRow
-                    title="Recommended for you"
+                    title="Learners like you also took these"
                     courses={skillRecommendationCourses}
                   />
 

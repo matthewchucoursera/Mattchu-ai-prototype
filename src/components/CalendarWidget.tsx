@@ -127,7 +127,7 @@ export function CalendarWidget() {
       {/* Day stats — heading and numbers update with selected day */}
       <div className="px-24 py-16">
         <p className="cds-body-secondary text-grey-975 mb-16">
-          January {selectedDay} stats
+          March {selectedDay} stats
         </p>
         <div className="flex gap-24 flex-wrap">
           <div>

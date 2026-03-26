@@ -44,15 +44,15 @@ export const recentCertificates: CertificateData[] = [
 
 export const calendarConfig = {
   year: 2026,
-  month: 0, // January
-  monthLabel: "January 2026",
+  month: 2, // March
+  monthLabel: "March 2026",
   dotsOn: [3, 11] as number[],
   barsOn: [4, 5, 6, 17, 18, 19, 20] as number[],
   selectedDay: 23,
 };
 
 export const januaryStats = {
-  dateLabel: "January 23 stats",
+  dateLabel: "March 23 stats",
   minutesLearned: 50,
   itemsCompleted: 20,
   highestGrade: "85.5%",

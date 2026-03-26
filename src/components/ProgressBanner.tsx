@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { CircularProgress } from "./CircularProgress";
 import { todaysGoals, weeklyActivityData } from "../data/mockData";
 
@@ -8,7 +8,6 @@ interface ProgressBannerProps {
   progressPercent: number;
   courseTitle: string;
   certificateName: string;
-  videoSrc: string;
 }
 
 export function ProgressBanner({
@@ -16,9 +15,32 @@ export function ProgressBanner({
   progressPercent,
   courseTitle,
   certificateName,
-  videoSrc,
 }: ProgressBannerProps) {
   const [completedGoals, setCompletedGoals] = useState<Set<string>>(new Set());
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  function togglePlay() {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play(); setIsPlaying(true); }
+    else { v.pause(); setIsPlaying(false); }
+  }
+
+  function toggleMute() {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setIsMuted(v.muted);
+  }
+
+  function handleTimeUpdate() {
+    const v = videoRef.current;
+    if (!v || !v.duration) return;
+    setProgress((v.currentTime / v.duration) * 100);
+  }
 
   function toggleGoal(id: string) {
     setCompletedGoals((prev) => {
@@ -67,12 +89,49 @@ export function ProgressBanner({
             </div>
 
             {/* Video thumbnail */}
-            <div className="h-[206px] rounded-8 overflow-hidden flex-shrink-0 w-full sm:flex-1 sm:h-auto sm:self-stretch">
-              <img
-                src={videoSrc}
-                alt="Course preview"
+            <div className="relative h-[206px] rounded-8 overflow-hidden flex-shrink-0 w-full sm:flex-1 sm:h-auto sm:self-stretch">
+              <video
+                ref={videoRef}
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-full object-cover"
+                src="https://assets.mixkit.co/videos/30599/30599-720.mp4"
+                onTimeUpdate={handleTimeUpdate}
               />
+              {/* Grey preview overlay */}
+              <div className="absolute inset-0 bg-darken-300" />
+              {/* Video controls */}
+              <div className="absolute bottom-12 left-12 right-12 flex items-center gap-8">
+                {/* Play/Pause */}
+                <button
+                  type="button"
+                  onClick={togglePlay}
+                  className="flex items-center justify-center w-32 h-32 rounded-full bg-white text-grey-975 hover:bg-grey-50 transition-colors duration-fast flex-shrink-0"
+                >
+                  <span className="material-symbols-rounded" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>
+                    {isPlaying ? "pause" : "play_arrow"}
+                  </span>
+                </button>
+                {/* Progress bar */}
+                <div className="flex-1 h-4 bg-lighten-300 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white rounded-full"
+                    style={{ width: `${progress}%`, transition: "width 1s linear" }}
+                  />
+                </div>
+                {/* Mute/Unmute */}
+                <button
+                  type="button"
+                  onClick={toggleMute}
+                  className="flex items-center justify-center w-32 h-32 rounded-full bg-white text-grey-975 hover:bg-grey-50 transition-colors duration-fast flex-shrink-0"
+                >
+                  <span className="material-symbols-rounded" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>
+                    {isMuted ? "volume_off" : "volume_up"}
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
