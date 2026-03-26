@@ -1,17 +1,20 @@
 import type { CourseCardData } from "../data/mockData";
+import { useT } from "../contexts/LanguageContext";
 
 interface CourseCardProps {
   course: CourseCardData;
 }
 
 export function CourseCard({ course }: CourseCardProps) {
+  const t = useT();
+
   return (
     <div className="bg-white border border-grey-100 rounded-16 overflow-hidden flex-shrink-0 flex flex-col cursor-pointer" style={{ minWidth: 240, flex: "1 0 0" }}>
       {/* Thumbnail */}
       <div className="relative w-full overflow-hidden rounded-16" style={{ aspectRatio: "304 / 171" }}>
         <img
           src={course.thumbnail}
-          alt={course.title}
+          alt={t(course.titleKey)}
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
@@ -31,13 +34,13 @@ export function CourseCard({ course }: CourseCardProps) {
           className="cds-subtitle-sm text-grey-975 leading-tight"
           style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
         >
-          {course.title}
+          {t(course.titleKey)}
         </p>
 
         {/* Best for */}
         <p className="cds-body-tertiary text-grey-600" style={{ height: 54, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>
           <span className="font-bold text-grey-975">Best for:</span>{" "}
-          {course.bestFor}
+          {t(course.bestForKey)}
         </p>
 
         {/* Footer */}
@@ -54,11 +57,11 @@ export function CourseCard({ course }: CourseCardProps) {
 
           {/* Metadata */}
           <div className="flex flex-wrap items-center gap-4 cds-body-tertiary text-grey-600 whitespace-nowrap">
-            <span>{course.level}</span>
+            <span>{t(course.levelKey)}</span>
             <span>·</span>
-            <span>{course.type}</span>
+            <span>{t(course.typeKey)}</span>
             <span>·</span>
-            <span>{course.duration}</span>
+            <span>{t(course.durationKey)}</span>
           </div>
 
           {/* Badges */}
@@ -77,13 +80,13 @@ export function CourseCard({ course }: CourseCardProps) {
             </span>
 
             {/* Tag pills */}
-            {course.tags.map((tag) => (
+            {course.tagKeys.map((tagKey) => (
               <span
-                key={tag}
+                key={tagKey}
                 className="inline-flex items-center justify-center px-6 border border-grey-100 rounded-full text-grey-600"
                 style={{ height: 16, fontSize: "9.5px", lineHeight: 1 }}
               >
-                {tag}
+                {t(tagKey)}
               </span>
             ))}
           </div>

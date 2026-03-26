@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { skillDomains } from "../data/mockData";
+import { useT } from "../contexts/LanguageContext";
+import type { TranslationKey } from "../i18n/translations";
 
 type Tier = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
@@ -10,10 +12,18 @@ const TIER_STYLES: Record<Tier, { badge: string; bar: string }> = {
   Expert:       { badge: "bg-yellow-25 text-yellow-700",  bar: "bg-yellow-700" },
 };
 
+const TIER_KEYS: Record<Tier, TranslationKey> = {
+  Beginner:     "tier_beginner",
+  Intermediate: "tier_intermediate",
+  Advanced:     "tier_advanced",
+  Expert:       "tier_expert",
+};
+
 const TIER_ORDER: Tier[] = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
 export function SkillsTab() {
   const [mounted, setMounted] = useState(false);
+  const t = useT();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -30,8 +40,8 @@ export function SkillsTab() {
       {/* XP summary header */}
       <div className="flex items-center gap-16 flex-wrap">
         <div className="flex flex-col gap-2">
-          <p className="cds-body-tertiary text-grey-600">Total XP earned</p>
-          <p className="cds-title-xs text-grey-975">{totalXp.toLocaleString()} XP</p>
+          <p className="cds-body-tertiary text-grey-600">{t("xp_total_earned_label")}</p>
+          <p className="cds-title-xs text-grey-975">{totalXp.toLocaleString()} {t("xp_suffix")}</p>
         </div>
         <div className="flex gap-8 flex-wrap">
           {TIER_ORDER.map((tier) => {
@@ -39,7 +49,7 @@ export function SkillsTab() {
             return (
               <div key={tier} className={`flex items-center gap-4 px-10 py-4 rounded-32 cds-body-tertiary ${styles.badge}`}>
                 <div className={`w-6 h-6 rounded-full ${styles.bar}`} />
-                {tier}
+                {t(TIER_KEYS[tier])}
               </div>
             );
           })}
@@ -50,7 +60,7 @@ export function SkillsTab() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-32">
         {skillDomains.map((domain) => (
           <div key={domain.id} className="flex flex-col gap-16">
-            <h2 className="cds-subtitle-sm text-grey-975">{domain.label}</h2>
+            <h2 className="cds-subtitle-sm text-grey-975">{t(domain.labelKey)}</h2>
             <div className="flex flex-col gap-16">
               {domain.skills.map((skill, i) => {
                 const tier = skill.tier as Tier;
@@ -60,9 +70,9 @@ export function SkillsTab() {
                   <div key={skill.id} className="flex flex-col gap-6">
                     <div className="flex items-center justify-between gap-8">
                       <div className="flex items-center gap-6 min-w-0">
-                        <span className="cds-body-secondary text-grey-975 truncate">{skill.name}</span>
+                        <span className="cds-body-secondary text-grey-975 truncate">{t(skill.nameKey)}</span>
                         <span className={`cds-body-tertiary px-6 py-2 rounded-32 flex-shrink-0 ${styles.badge}`}>
-                          {skill.tier}
+                          {t(TIER_KEYS[tier])}
                         </span>
                       </div>
                     </div>

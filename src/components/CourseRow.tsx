@@ -32,15 +32,6 @@ export function CourseRow({ courses, title }: CourseRowProps) {
   const totalDesktopPages = Math.ceil(courses.length / DESKTOP_PER_PAGE);
   const totalMobilePages = Math.ceil(courses.length / MOBILE_PER_PAGE);
 
-  const desktopVisible = courses.slice(
-    desktopPage * DESKTOP_PER_PAGE,
-    (desktopPage + 1) * DESKTOP_PER_PAGE
-  );
-  const mobileVisible = courses.slice(
-    mobilePage * MOBILE_PER_PAGE,
-    (mobilePage + 1) * MOBILE_PER_PAGE
-  );
-
   const currentPage = isDesktop ? desktopPage : mobilePage;
   const totalPages = isDesktop ? totalDesktopPages : totalMobilePages;
   const isFirstPage = currentPage === 0;
@@ -93,21 +84,56 @@ export function CourseRow({ courses, title }: CourseRowProps) {
         </div>
       </div>
 
-      {/* Mobile grid — 1 card per page (hidden sm+) */}
-      <div key={`m-${mobilePage}`} className="grid grid-cols-1 gap-16 sm:hidden animate-entrance">
-        {mobileVisible.map((course) => (
-          <CourseCard key={course.id} course={course} />
-        ))}
+      {/* Mobile carousel — 1 card per page (hidden sm+) */}
+      <div className="overflow-hidden sm:hidden">
+        <div
+          className="flex"
+          style={{
+            transform: `translateX(-${mobilePage * (100 / totalMobilePages)}%)`,
+            transition: "transform 300ms var(--ease-standard, ease)",
+            width: `${totalMobilePages * 100}%`,
+          }}
+        >
+          {Array.from({ length: totalMobilePages }).map((_, pageIdx) => (
+            <div
+              key={pageIdx}
+              className="grid grid-cols-1 gap-16"
+              style={{ width: `${100 / totalMobilePages}%`, flexShrink: 0 }}
+            >
+              {courses
+                .slice(pageIdx * MOBILE_PER_PAGE, (pageIdx + 1) * MOBILE_PER_PAGE)
+                .map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Desktop grid — 3 cards per page (hidden below sm) */}
-      <div
-        key={`d-${desktopPage}`}
-        className="hidden sm:grid sm:grid-cols-3 gap-16 animate-entrance"
-      >
-        {desktopVisible.map((course) => (
-          <CourseCard key={course.id} course={course} />
-        ))}
+      {/* Desktop carousel — 3 cards per page (hidden below sm) */}
+      <div className="hidden sm:block overflow-hidden">
+        <div
+          className="flex"
+          style={{
+            transform: `translateX(-${desktopPage * (100 / totalDesktopPages)}%)`,
+            transition: "transform 300ms var(--ease-standard, ease)",
+            width: `${totalDesktopPages * 100}%`,
+          }}
+        >
+          {Array.from({ length: totalDesktopPages }).map((_, pageIdx) => (
+            <div
+              key={pageIdx}
+              className="grid sm:grid-cols-3 gap-16"
+              style={{ width: `${100 / totalDesktopPages}%`, flexShrink: 0 }}
+            >
+              {courses
+                .slice(pageIdx * DESKTOP_PER_PAGE, (pageIdx + 1) * DESKTOP_PER_PAGE)
+                .map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

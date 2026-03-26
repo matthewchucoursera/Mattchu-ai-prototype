@@ -1,26 +1,21 @@
 import { useState, useRef } from "react";
 import { CircularProgress } from "./CircularProgress";
 import { todaysGoals, weeklyActivityData } from "../data/mockData";
+import { useT } from "../contexts/LanguageContext";
 
-// userName removed — greeting now lives in the DigestHeader (App.tsx)
 interface ProgressBannerProps {
-  pathName: string;
   progressPercent: number;
-  courseTitle: string;
-  certificateName: string;
 }
 
-export function ProgressBanner({
-  pathName,
-  progressPercent,
-  courseTitle,
-  certificateName,
-}: ProgressBannerProps) {
+export function ProgressBanner({ progressPercent }: ProgressBannerProps) {
+  const t = useT();
   const [completedGoals, setCompletedGoals] = useState<Set<string>>(new Set());
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const prevTimeRef = useRef(0);
+  const cumulativeTimeRef = useRef(0);
 
   function togglePlay() {
     const v = videoRef.current;
@@ -39,7 +34,15 @@ export function ProgressBanner({
   function handleTimeUpdate() {
     const v = videoRef.current;
     if (!v || !v.duration) return;
-    setProgress((v.currentTime / v.duration) * 100);
+    const curr = v.currentTime;
+    // Detect a loop: currentTime jumped backward by more than 1 second
+    if (curr < prevTimeRef.current - 1) {
+      cumulativeTimeRef.current += v.duration;
+    }
+    prevTimeRef.current = curr;
+    // Show cumulative progress over 4 loops so bar moves slowly forward
+    const totalTarget = v.duration * 4;
+    setProgress(Math.min(((cumulativeTimeRef.current + curr) / totalTarget) * 100, 100));
   }
 
   function toggleGoal(id: string) {
@@ -50,15 +53,14 @@ export function ProgressBanner({
     });
   }
 
-  // Component renders card content only — caller supplies the outer bg + padding
   return (
     <div className="flex flex-col gap-16">
-      {/* Title + badge */}
+      {/* Title */}
       <div
         className="flex flex-col gap-12 sm:flex-row sm:items-center sm:gap-16 animate-entrance"
         style={{ animationDelay: "0ms" }}
       >
-        <h1 className="cds-title-sm text-grey-975">{pathName}</h1>
+        <h1 className="cds-title-sm text-grey-975">{t("path_name")}</h1>
       </div>
 
       {/* Cards row */}
@@ -76,15 +78,15 @@ export function ProgressBanner({
             <div className="flex flex-col gap-16 sm:flex-shrink-0 sm:w-[349px]">
               <CircularProgress percent={progressPercent} size={67} />
               <div className="flex flex-col gap-4">
-                <p className="cds-subtitle-md text-grey-975">{courseTitle}</p>
-                <p className="cds-body-secondary text-grey-600">{certificateName}</p>
+                <p className="cds-subtitle-md text-grey-975">{t("course_title")}</p>
+                <p className="cds-body-secondary text-grey-600">{t("cert_name")}</p>
               </div>
               {/* "Resume learning" on desktop */}
               <button
                 type="button"
                 className="hidden sm:flex self-start px-16 py-8 bg-blue-700 text-white rounded-8 cds-action-secondary hover:bg-blue-800 transition-colors duration-fast"
               >
-                Resume learning
+                {t("cta_resume_learning")}
               </button>
             </div>
 
@@ -97,7 +99,7 @@ export function ProgressBanner({
                 muted
                 playsInline
                 className="w-full h-full object-cover"
-                src="https://assets.mixkit.co/videos/30599/30599-720.mp4"
+                src="https://assets.mixkit.co/videos/37027/37027-720.mp4"
                 onTimeUpdate={handleTimeUpdate}
               />
               {/* Grey preview overlay */}
@@ -140,7 +142,7 @@ export function ProgressBanner({
             type="button"
             className="sm:hidden self-start px-16 py-8 bg-blue-700 text-white rounded-8 cds-action-secondary hover:bg-blue-800 transition-colors duration-fast"
           >
-            Resume learning
+            {t("cta_resume_learning")}
           </button>
         </div>
 
@@ -150,10 +152,10 @@ export function ProgressBanner({
           {/* Fun fact */}
           <div className="bg-white rounded-16 sm:bg-transparent sm:rounded-none px-16 pt-16 pb-16">
             <div className="flex items-center gap-8 mb-12">
-              <span className="cds-subtitle-sm text-grey-975">Daily fun fact</span>
+              <span className="cds-subtitle-sm text-grey-975">{t("fun_fact_title")}</span>
             </div>
             <p className="cds-body-secondary text-grey-600">
-              The average person will spend about 6 months of their life waiting for red lights to turn green — that&apos;s 1,800 hours of potential learning time.
+              {t("fun_fact_body")}
             </p>
           </div>
 
@@ -163,14 +165,17 @@ export function ProgressBanner({
           {/* Today's goals */}
           <div className="bg-white rounded-16 sm:bg-transparent sm:rounded-none px-16 pt-16 pb-16">
             <div className="flex items-center gap-8 mb-12">
-              <span className="cds-subtitle-sm text-grey-975">Today&apos;s goals</span>
+              <span className="cds-subtitle-sm text-grey-975">{t("goals_today_title")}</span>
               <span className="cds-body-tertiary text-purple-700 bg-purple-25 px-8 py-2 rounded-32">
-                Personalized
+                {t("badge_personalized")}
               </span>
             </div>
             <ul className="flex flex-col gap-8">
               {todaysGoals.map((goal) => {
                 const done = completedGoals.has(goal.id);
+                const translatedText = t(goal.textKey);
+                const translatedBold = goal.boldTextKey ? t(goal.boldTextKey) : "";
+                const translatedSuffix = goal.suffixKey ? t(goal.suffixKey) : "";
                 return (
                   <li key={goal.id}>
                     <button
@@ -196,17 +201,17 @@ export function ProgressBanner({
                           done ? "line-through text-grey-400" : "text-grey-975",
                         ].join(" ")}
                       >
-                        {goal.boldText ? (
+                        {translatedBold ? (
                           <>
-                            {goal.text.split(goal.boldText)[0]}
-                            <strong>{goal.boldText}</strong>
-                            {goal.text.split(goal.boldText)[1] ?? ""}
-                            {goal.suffix && (
-                              <span className="text-grey-600"> {goal.suffix}</span>
+                            {translatedText.split(translatedBold)[0]}
+                            <span style={{ fontWeight: 600 }}>{translatedBold}</span>
+                            {translatedText.split(translatedBold)[1] ?? ""}
+                            {translatedSuffix && (
+                              <span className="text-grey-600"> {translatedSuffix}</span>
                             )}
                           </>
                         ) : (
-                          goal.text
+                          translatedText
                         )}
                       </span>
                     </button>
@@ -222,13 +227,13 @@ export function ProgressBanner({
           {/* Weekly activity */}
           <div className="bg-white rounded-16 sm:bg-transparent sm:rounded-none px-16 pt-16 pb-16 flex flex-col gap-12">
             <div className="flex items-center gap-8">
-              <span className="cds-subtitle-sm text-grey-975">Weekly activity</span>
+              <span className="cds-subtitle-sm text-grey-975">{t("weekly_activity_title")}</span>
               <span className="cds-body-tertiary text-purple-700 bg-purple-25 px-8 py-2 rounded-32">
-                {weeklyActivityData.streak}
+                {t(weeklyActivityData.streakKey)}
               </span>
             </div>
             <p className="cds-body-secondary text-grey-600">
-              {weeklyActivityData.message}
+              {t(weeklyActivityData.messageKey)}
             </p>
             <div className="flex gap-4">
               {weeklyActivityData.days.map((day, i) => {
@@ -247,13 +252,14 @@ export function ProgressBanner({
                     </div>
                   );
                 }
+                const dayLabel = day.labelKey ? t(day.labelKey) : day.label;
                 if (day.isCurrent) {
                   return (
                     <div
                       key={i}
                       className="w-32 h-32 rounded-8 bg-white border-2 border-grey-200 flex items-center justify-center flex-shrink-0"
                     >
-                      <span className="cds-body-tertiary text-grey-600">{day.label}</span>
+                      <span className="cds-body-tertiary text-grey-600">{dayLabel}</span>
                     </div>
                   );
                 }
@@ -262,13 +268,13 @@ export function ProgressBanner({
                     key={i}
                     className="w-32 h-32 rounded-8 bg-grey-50 flex items-center justify-center flex-shrink-0"
                   >
-                    <span className="cds-body-tertiary text-grey-600">{day.label}</span>
+                    <span className="cds-body-tertiary text-grey-600">{dayLabel}</span>
                   </div>
                 );
               })}
             </div>
             <p className="cds-body-tertiary text-grey-600">
-              {weeklyActivityData.summary}
+              {t(weeklyActivityData.summaryKey)}
             </p>
           </div>
         </div>

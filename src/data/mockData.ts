@@ -1,26 +1,32 @@
 // ─── Dashboard data ───────────────────────────────────────────────────────────
 
+import type { TranslationKey } from "../i18n/translations";
+
 export interface SkillData {
   name: string;
+  nameKey: TranslationKey;
   completed: number;
   total: number;
 }
 
 export const skills: SkillData[] = [
-  { name: "Data Storytelling", completed: 13, total: 13 },
-  { name: "Literacy & Integrity", completed: 1, total: 10 },
-  { name: "Social Media Strategy", completed: 4, total: 9 },
-  { name: "Email Marketing", completed: 3, total: 8 },
-  { name: "Digital Marketing", completed: 4, total: 9 },
-  { name: "Wireframing", completed: 3, total: 8 },
-  { name: "AI tools", completed: 4, total: 9 },
+  { name: "Data Storytelling", nameKey: "skill_data_storytelling", completed: 13, total: 13 },
+  { name: "Literacy & Integrity", nameKey: "skill_literacy_integrity", completed: 1, total: 10 },
+  { name: "Social Media Strategy", nameKey: "skill_social_media_strategy", completed: 4, total: 9 },
+  { name: "Email Marketing", nameKey: "skill_email_marketing", completed: 3, total: 8 },
+  { name: "Digital Marketing", nameKey: "skill_digital_marketing", completed: 4, total: 9 },
+  { name: "Wireframing", nameKey: "skill_wireframing", completed: 3, total: 8 },
+  { name: "AI tools", nameKey: "skill_ai_tools", completed: 4, total: 9 },
 ];
 
 export interface CertificateData {
   id: string;
   title: string;
+  titleKey: TranslationKey;
   primaryAction: string;
+  primaryActionKey: TranslationKey;
   secondaryAction: string;
+  secondaryActionKey: TranslationKey;
   useGoogleLogo?: boolean;
   localLogo?: string;
 }
@@ -29,15 +35,21 @@ export const recentCertificates: CertificateData[] = [
   {
     id: "cert-1",
     title: "Gen AI Foundations Learning Path",
+    titleKey: "cert_title_gen_ai",
     primaryAction: "Add to LinkedIn",
+    primaryActionKey: "action_add_to_linkedin",
     secondaryAction: "View badge",
+    secondaryActionKey: "action_view_badge",
     localLogo: "/genai-badge.png",
   },
   {
     id: "cert-2",
     title: "Google Data Analyst Professional Certificate",
+    titleKey: "cert_title_google_data",
     primaryAction: "Add to LinkedIn",
+    primaryActionKey: "action_add_to_linkedin",
     secondaryAction: "View certificate",
+    secondaryActionKey: "action_view_certificate",
     localLogo: "/google-badge.png",
   },
 ];
@@ -59,23 +71,42 @@ export const januaryStats = {
 };
 
 export const todaysGoals = [
-  { id: "g1", text: "Complete any 5 learning items", suffix: "· 0/5", boldText: "5 learning items" },
-  { id: "g2", text: "Complete 1 practice item", suffix: "", boldText: "" },
+  {
+    id: "g1",
+    text: "Complete any 5 learning items",
+    textKey: "goal_complete_five_items" as TranslationKey,
+    suffix: "· 0/5",
+    suffixKey: "goal_suffix_progress" as TranslationKey,
+    boldText: "5 learning items",
+    boldTextKey: "goal_five_learning_items_bold" as TranslationKey,
+  },
+  {
+    id: "g2",
+    text: "Complete 1 practice item",
+    textKey: "goal_complete_one_practice" as TranslationKey,
+    suffix: "",
+    suffixKey: null,
+    boldText: "",
+    boldTextKey: null,
+  },
 ];
 
 export const weeklyActivityData = {
   streak: "1 week streak",
+  streakKey: "weekly_streak" as TranslationKey,
   message: "Way to go! You've exceeded your learning target by 2 days this week.",
+  messageKey: "weekly_message" as TranslationKey,
   days: [
-    { label: "", completed: true, isCurrent: false },
-    { label: "", completed: true, isCurrent: false },
-    { label: "", completed: true, isCurrent: false },
-    { label: "", completed: true, isCurrent: false },
-    { label: "Sa", completed: false, isCurrent: true },
-    { label: "Su", completed: false, isCurrent: false },
-    { label: "Mo", completed: false, isCurrent: false },
+    { label: "", labelKey: null as TranslationKey | null, completed: true, isCurrent: false },
+    { label: "", labelKey: null as TranslationKey | null, completed: true, isCurrent: false },
+    { label: "", labelKey: null as TranslationKey | null, completed: true, isCurrent: false },
+    { label: "", labelKey: null as TranslationKey | null, completed: true, isCurrent: false },
+    { label: "Sa", labelKey: "day_sa" as TranslationKey, completed: false, isCurrent: true },
+    { label: "Su", labelKey: "day_su" as TranslationKey, completed: false, isCurrent: false },
+    { label: "Mo", labelKey: "day_mo" as TranslationKey, completed: false, isCurrent: false },
   ],
   summary: "3 items completed · 10 minutes learned",
+  summaryKey: "weekly_summary" as TranslationKey,
 };
 
 export const leaderboardData = [
@@ -89,26 +120,29 @@ export const skillDomains = [
   {
     id: "data",
     label: "Data",
+    labelKey: "domain_data" as TranslationKey,
     skills: [
-      { id: "sql", name: "SQL", tier: "Advanced", xp: 2800, xpToNext: 5000 },
-      { id: "data-analysis", name: "Data Analysis", tier: "Intermediate", xp: 1240, xpToNext: 2000 },
-      { id: "data-viz", name: "Data Visualization", tier: "Beginner", xp: 340, xpToNext: 1000 },
+      { id: "sql", name: "SQL", nameKey: "skill_sql" as TranslationKey, tier: "Advanced", tierKey: "tier_advanced" as TranslationKey, xp: 2800, xpToNext: 5000 },
+      { id: "data-analysis", name: "Data Analysis", nameKey: "skill_data_analysis" as TranslationKey, tier: "Intermediate", tierKey: "tier_intermediate" as TranslationKey, xp: 1240, xpToNext: 2000 },
+      { id: "data-viz", name: "Data Visualization", nameKey: "skill_data_visualization" as TranslationKey, tier: "Beginner", tierKey: "tier_beginner" as TranslationKey, xp: 340, xpToNext: 1000 },
     ],
   },
   {
     id: "programming",
     label: "Programming",
+    labelKey: "domain_programming" as TranslationKey,
     skills: [
-      { id: "python", name: "Python", tier: "Intermediate", xp: 1800, xpToNext: 2000 },
-      { id: "r", name: "R", tier: "Beginner", xp: 200, xpToNext: 1000 },
+      { id: "python", name: "Python", nameKey: "skill_python" as TranslationKey, tier: "Intermediate", tierKey: "tier_intermediate" as TranslationKey, xp: 1800, xpToNext: 2000 },
+      { id: "r", name: "R", nameKey: "skill_r_lang" as TranslationKey, tier: "Beginner", tierKey: "tier_beginner" as TranslationKey, xp: 200, xpToNext: 1000 },
     ],
   },
   {
     id: "business",
     label: "Business",
+    labelKey: "domain_business" as TranslationKey,
     skills: [
-      { id: "project-mgmt", name: "Project Management", tier: "Expert", xp: 4200, xpToNext: 5000 },
-      { id: "communication", name: "Communication", tier: "Advanced", xp: 3100, xpToNext: 5000 },
+      { id: "project-mgmt", name: "Project Management", nameKey: "skill_project_management" as TranslationKey, tier: "Expert", tierKey: "tier_expert" as TranslationKey, xp: 4200, xpToNext: 5000 },
+      { id: "communication", name: "Communication", nameKey: "skill_communication" as TranslationKey, tier: "Advanced", tierKey: "tier_advanced" as TranslationKey, xp: 3100, xpToNext: 5000 },
     ],
   },
 ];
@@ -131,17 +165,23 @@ export const ASSETS = {
 export interface CourseCardData {
   id: string;
   title: string;
+  titleKey: TranslationKey;
   provider: string;
   providerLogo: string;
   thumbnail: string;
   rating: number;
   reviewCount: string;
   level: string;
+  levelKey: TranslationKey;
   type: string;
+  typeKey: TranslationKey;
   duration: string;
+  durationKey: TranslationKey;
   matchPercent: number;
   tags: string[];
+  tagKeys: TranslationKey[];
   bestFor: string;
+  bestForKey: TranslationKey;
 }
 
 export interface TrendingCourseData {
@@ -163,66 +203,134 @@ export const skillRecommendationCourses: CourseCardData[] = [
   {
     id: "1",
     title: "Applied Software Engineering Fundamentals Specialization",
+    titleKey: "course_applied_swe",
     provider: "Google",
     providerLogo: ASSETS.googleLogo,
     thumbnail: "https://www.figma.com/api/mcp/asset/5df463e3-1095-4c3b-b9ed-596c78a07667",
     rating: 4.9,
     reviewCount: "3.4k",
     level: "Beginner",
+    levelKey: "level_beginner",
     type: "Degree",
+    typeKey: "course_type_degree",
     duration: "3-6 months",
+    durationKey: "duration_3_6_months",
     matchPercent: 90,
     tags: ["AI Skills"],
+    tagKeys: ["tag_ai_skills"],
     bestFor:
       "Beginners, non-technical learners, business leaders, and teams who want to understand AI conceptually",
+    bestForKey: "course_best_for_swe",
   },
   {
     id: "2",
     title: "Applied Software Engineering Fundamentals Specialization",
+    titleKey: "course_applied_swe",
     provider: "Google",
     providerLogo: ASSETS.googleLogo,
     thumbnail: "https://www.figma.com/api/mcp/asset/8bd35774-c5f0-4701-8536-678f99f1e827",
     rating: 4.9,
     reviewCount: "3.4k",
     level: "Beginner",
+    levelKey: "level_beginner",
     type: "Degree",
+    typeKey: "course_type_degree",
     duration: "3-6 months",
+    durationKey: "duration_3_6_months",
     matchPercent: 90,
     tags: ["AI Skills"],
+    tagKeys: ["tag_ai_skills"],
     bestFor:
       "Beginners, non-technical learners, business leaders, and teams who want to understand AI conceptually",
+    bestForKey: "course_best_for_swe",
   },
   {
     id: "3",
     title: "Applied Software Engineering Fundamentals Specialization",
+    titleKey: "course_applied_swe",
     provider: "Google",
     providerLogo: ASSETS.googleLogo,
     thumbnail: "https://www.figma.com/api/mcp/asset/e1ad5770-dbc9-44d5-8dea-3d7a440e0d97",
     rating: 4.9,
     reviewCount: "3.4k",
     level: "Beginner",
+    levelKey: "level_beginner",
     type: "Degree",
+    typeKey: "course_type_degree",
     duration: "3-6 months",
+    durationKey: "duration_3_6_months",
     matchPercent: 90,
     tags: ["AI Skills"],
+    tagKeys: ["tag_ai_skills"],
     bestFor:
       "Beginners, non-technical learners, business leaders, and teams who want to understand AI conceptually",
+    bestForKey: "course_best_for_swe",
   },
   {
     id: "4",
     title: "Applied Software Engineering Fundamentals Specialization",
+    titleKey: "course_applied_swe",
     provider: "Google",
     providerLogo: ASSETS.googleLogo,
     thumbnail: "https://www.figma.com/api/mcp/asset/df702f8d-838f-4be1-ae30-dd8d1a8d9e37",
     rating: 4.9,
     reviewCount: "3.4k",
     level: "Beginner",
+    levelKey: "level_beginner",
     type: "Degree",
+    typeKey: "course_type_degree",
     duration: "3-6 months",
+    durationKey: "duration_3_6_months",
     matchPercent: 90,
     tags: ["AI Skills"],
+    tagKeys: ["tag_ai_skills"],
     bestFor:
       "Beginners, non-technical learners, business leaders, and teams who want to understand AI conceptually",
+    bestForKey: "course_best_for_swe",
+  },
+  {
+    id: "5",
+    title: "IBM Data Science Professional Certificate",
+    titleKey: "course_ibm_data_science",
+    provider: "IBM",
+    providerLogo: ASSETS.ibmLogo,
+    thumbnail: "https://www.figma.com/api/mcp/asset/13a69fc2-df2b-4afc-bf26-702b3b010045",
+    rating: 4.8,
+    reviewCount: "21k",
+    level: "Beginner",
+    levelKey: "level_beginner",
+    type: "Professional Certificate",
+    typeKey: "course_type_professional_certificate",
+    duration: "3-6 months",
+    durationKey: "duration_3_6_months",
+    matchPercent: 85,
+    tags: ["Data Science"],
+    tagKeys: ["tag_data_science"],
+    bestFor:
+      "Anyone looking to build foundational data science skills with hands-on Python and SQL projects",
+    bestForKey: "course_best_for_ibm",
+  },
+  {
+    id: "6",
+    title: "Prompt Engineering for ChatGPT",
+    titleKey: "course_prompt_engineering",
+    provider: "Vanderbilt University",
+    providerLogo: ASSETS.vanderbiltLogo,
+    thumbnail: "https://www.figma.com/api/mcp/asset/75b18e69-32f9-42f3-947b-d993cd99ae09",
+    rating: 4.7,
+    reviewCount: "8.1k",
+    level: "Beginner",
+    levelKey: "level_beginner",
+    type: "Course",
+    typeKey: "course_type_course",
+    duration: "1-3 months",
+    durationKey: "duration_1_3_months",
+    matchPercent: 82,
+    tags: ["AI Skills"],
+    tagKeys: ["tag_ai_skills"],
+    bestFor:
+      "Professionals and students who want to master prompt engineering to get better results from AI tools",
+    bestForKey: "course_best_for_prompt",
   },
 ];
 

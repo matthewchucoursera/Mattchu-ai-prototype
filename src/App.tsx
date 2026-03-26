@@ -5,6 +5,7 @@ import { ProgressBanner } from "./components/ProgressBanner";
 import { CalendarWidget } from "./components/CalendarWidget";
 import { CourseRow } from "./components/CourseRow";
 import { SkillsTab } from "./components/SkillsTab";
+import { useT, useDateLocale } from "./contexts/LanguageContext";
 import {
   ASSETS,
   skills,
@@ -13,12 +14,12 @@ import {
   leaderboardData,
 } from "./data/mockData";
 
-const TABS = ["Overview", "Skills", "In progress", "Saved", "Certificates"] as const;
-type Tab = (typeof TABS)[number];
+const TAB_KEYS = ["tab_overview", "tab_skills", "tab_in_progress", "tab_saved", "tab_certificates"] as const;
+type TabKey = (typeof TAB_KEYS)[number];
 
 // Build a human-readable date string for the digest header
-function getTodayLabel() {
-  return new Date().toLocaleDateString("en-US", {
+function getTodayLabel(locale: string) {
+  return new Date().toLocaleDateString(locale, {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -26,8 +27,10 @@ function getTodayLabel() {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<Tab>("Overview");
+  const [activeTab, setActiveTab] = useState<TabKey>("tab_overview");
   const [mounted, setMounted] = useState(false);
+  const t = useT();
+  const dateLocale = useDateLocale();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -50,8 +53,8 @@ export default function App() {
         {/* ── Digest header ── */}
         <header className="hidden md:flex items-center justify-between gap-24 bg-white border-b border-grey-100 px-32 py-16 flex-shrink-0">
           <div className="flex flex-col gap-2">
-            <p className="cds-body-tertiary text-grey-600">{getTodayLabel()}</p>
-            <p className="cds-subtitle-md text-grey-975">Good morning, Matthew</p>
+            <p className="cds-body-tertiary text-grey-600">{getTodayLabel(dateLocale)}</p>
+            <p className="cds-subtitle-md text-grey-975">{t("greeting_morning_name")}</p>
           </div>
           <div className="flex items-center gap-12">
             {/* Learning streak */}
@@ -63,7 +66,7 @@ export default function App() {
                 bolt
               </span>
               <span className="cds-body-secondary text-yellow-800 whitespace-nowrap">
-                25-day streak
+                {t("streak_days")}
               </span>
             </div>
 
@@ -85,13 +88,13 @@ export default function App() {
                       M
                     </div>
                     <span className="cds-body-secondary text-purple-700 whitespace-nowrap">
-                      Rank {me.rank}
+                      {t("leaderboard_rank_prefix")} {me.rank}
                     </span>
                   </div>
 
                   {/* Hover dropdown */}
                   <div className="absolute right-0 top-full mt-4 w-[232px] bg-white rounded-16 shadow-elevation-2 border border-grey-100 p-12 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-[opacity,transform] duration-normal ease-entrance z-50">
-                    <p className="cds-body-tertiary text-grey-600 mb-8 px-8">This week · Team of 12</p>
+                    <p className="cds-body-tertiary text-grey-600 mb-8 px-8">{t("leaderboard_dropdown_subtitle")}</p>
                     <div className="flex flex-col gap-2">
                       {leaderboardData.map((entry) => (
                         <div
@@ -110,7 +113,7 @@ export default function App() {
                               entry.avatarColor,
                             ].join(" ")}
                           >
-                            {entry.name[0]}
+                            {entry.isYou ? t("leaderboard_you")[0] : entry.name[0]}
                           </div>
                           <span
                             className={[
@@ -118,10 +121,10 @@ export default function App() {
                               entry.isYou ? "text-blue-700" : "text-grey-975",
                             ].join(" ")}
                           >
-                            {entry.name}
+                            {entry.isYou ? t("leaderboard_you") : entry.name}
                           </span>
                           <span className="cds-body-tertiary text-grey-600 flex-shrink-0">
-                            {entry.points} pts
+                            {entry.points} {t("points_abbr")}
                           </span>
                         </div>
                       ))}
@@ -139,10 +142,7 @@ export default function App() {
           {/* "Up next" section — grey bg container with the ProgressBanner card inside */}
           <div className="bg-grey-25 px-16 sm:px-32 pt-24 pb-24">
             <ProgressBanner
-              pathName="Grow your product designer skills"
               progressPercent={46}
-              courseTitle="Share Data Through the Art of Visualization"
-              certificateName="Google Data Analytics & E-commerce Professional Certificate"
             />
           </div>
 
@@ -153,19 +153,19 @@ export default function App() {
             <div className="border-b border-grey-100">
               <div className="px-16 sm:px-32">
                 <div className="flex overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                  {TABS.map((tab) => (
+                  {TAB_KEYS.map((tabKey) => (
                     <button
-                      key={tab}
+                      key={tabKey}
                       type="button"
-                      onClick={() => setActiveTab(tab)}
+                      onClick={() => setActiveTab(tabKey)}
                       className={[
                         "flex-shrink-0 pb-12 pt-16 mr-24 cds-action-secondary transition-colors duration-fast whitespace-nowrap",
-                        activeTab === tab
+                        activeTab === tabKey
                           ? "text-grey-975 border-b-2 border-grey-975 -mb-px"
                           : "text-grey-600 hover:text-grey-975",
                       ].join(" ")}
                     >
-                      {tab}
+                      {t(tabKey)}
                     </button>
                   ))}
                 </div>
@@ -174,7 +174,7 @@ export default function App() {
 
             {/* Tab content — remounted on every tab switch for entrance animation */}
             <div key={activeTab} className="px-16 sm:px-32">
-            {activeTab === "Skills" ? (
+            {activeTab === "tab_skills" ? (
                 <SkillsTab />
               ) : (
               <div className="flex flex-col sm:flex-row sm:gap-32 py-24 sm:py-32 animate-entrance">
@@ -191,7 +191,7 @@ export default function App() {
                         <div key={skill.name + index} className="flex flex-col gap-4">
                           <div className="flex items-center justify-between">
                             <span className="cds-body-secondary text-grey-975">
-                              {skill.name}
+                              {t(skill.nameKey)}
                             </span>
                             <div className="flex items-center gap-4 flex-shrink-0">
                               <span className="cds-body-tertiary text-grey-600">
@@ -235,14 +235,14 @@ export default function App() {
 
                   {/* Learners like you also took these */}
                   <CourseRow
-                    title="Learners like you also took these"
+                    title={t("course_row_learners_like_you")}
                     courses={skillRecommendationCourses}
                   />
 
                   {/* Recent certificates */}
                   <div>
                     <h2 className="cds-subtitle-md text-grey-975 mb-16">
-                      Recent certificates
+                      {t("heading_recent_certificates")}
                     </h2>
                     <div className="flex flex-col">
                       {recentCertificates.map((cert, i) => (
@@ -267,19 +267,19 @@ export default function App() {
                               />
                             </div>
                             <div className="flex-1 min-w-0 flex flex-col gap-8">
-                              <p className="cds-subtitle-sm text-grey-975">{cert.title}</p>
+                              <p className="cds-subtitle-sm text-grey-975">{t(cert.titleKey)}</p>
                               <div className="flex items-center gap-8">
                                 <button
                                   type="button"
                                   className="cds-action-secondary text-blue-700 hover:text-blue-800 transition-colors duration-fast"
                                 >
-                                  {cert.primaryAction}
+                                  {t(cert.primaryActionKey)}
                                 </button>
                                 <button
                                   type="button"
                                   className="cds-action-secondary text-blue-700 hover:text-blue-800 transition-colors duration-fast"
                                 >
-                                  {cert.secondaryAction}
+                                  {t(cert.secondaryActionKey)}
                                 </button>
                               </div>
                             </div>
