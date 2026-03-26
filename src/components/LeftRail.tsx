@@ -32,12 +32,12 @@ const NAV_ITEMS: NavItem[] = [
 export function LeftRail() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [panel, setPanel] = useState<"main" | "language">("main");
-  const { lang, setLanguage } = useLanguage();
+  const { lang, switchLanguage } = useLanguage();
   const t = useT();
 
   function handleLanguageSelect(code: LangCode) {
-    setLanguage(code);
     setPanel("main");
+    switchLanguage(code);
   }
 
   return (

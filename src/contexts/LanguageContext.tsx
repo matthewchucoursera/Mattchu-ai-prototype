@@ -6,17 +6,35 @@ import type { LangCode, TranslationKey } from "../i18n/translations";
 interface LanguageContextValue {
   lang: LangCode;
   setLanguage: (lang: LangCode) => void;
+  switchLanguage: (lang: LangCode) => void;
+  isTransitioning: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextValue>({
   lang: "en",
   setLanguage: () => {},
+  switchLanguage: () => {},
+  isTransitioning: false,
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLanguage] = useState<LangCode>("en");
+  const [lang, setLang] = useState<LangCode>("en");
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  function setLanguage(code: LangCode) {
+    setLang(code);
+  }
+
+  function switchLanguage(code: LangCode) {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setLang(code);
+      setIsTransitioning(false);
+    }, 800);
+  }
+
   return (
-    <LanguageContext.Provider value={{ lang, setLanguage }}>
+    <LanguageContext.Provider value={{ lang, setLanguage, switchLanguage, isTransitioning }}>
       {children}
     </LanguageContext.Provider>
   );

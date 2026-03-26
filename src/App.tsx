@@ -5,7 +5,8 @@ import { ProgressBanner } from "./components/ProgressBanner";
 import { CalendarWidget } from "./components/CalendarWidget";
 import { CourseRow } from "./components/CourseRow";
 import { SkillsTab } from "./components/SkillsTab";
-import { useT, useDateLocale } from "./contexts/LanguageContext";
+import { SkeletonScreen } from "./components/SkeletonScreen";
+import { useT, useDateLocale, useLanguage } from "./contexts/LanguageContext";
 import {
   ASSETS,
   skills,
@@ -31,6 +32,7 @@ export default function App() {
   const [mounted, setMounted] = useState(false);
   const t = useT();
   const dateLocale = useDateLocale();
+  const { lang, isTransitioning } = useLanguage();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -49,6 +51,7 @@ export default function App() {
 
       {/* Main content column — scrolls independently of the rail */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {isTransitioning ? <SkeletonScreen /> : <div key={lang} className="contents animate-entrance">
 
         {/* ── Digest header ── */}
         <header className="hidden md:flex items-center justify-between gap-24 bg-white border-b border-grey-100 px-32 py-16 flex-shrink-0">
@@ -304,6 +307,7 @@ export default function App() {
             </div>
           </section>
         </main>
+      </div>}
       </div>
     </div>
   );
