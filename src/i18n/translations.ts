@@ -121,7 +121,7 @@ const en: Record<TranslationKey, string> = {
   // Progress banner
   path_name: "Grow your product designer skills",
   course_title: "Showcase leadership through public speaking",
-  cert_name: "Google Data Analytics & E-commerce Professional Certificate",
+  cert_name: "Public Speaking 101",
   cta_resume_learning: "Resume learning",
   // Fun fact
   fun_fact_title: "Daily fun fact",
