@@ -88,7 +88,7 @@ export function LeftRail({ isMobileOpen = false, onMobileClose }: LeftRailProps)
           {/* C mark — centered to match nav icons below */}
           <div className="flex items-center justify-center w-40 mx-auto flex-shrink-0">
             <img
-              src="/coursera-c-mark.png"
+              src="/coursera-c-mark.svg"
               alt="Coursera"
               style={{ width: 32, height: 32, objectFit: "contain" }}
             />
