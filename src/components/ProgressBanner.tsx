@@ -99,7 +99,7 @@ export function ProgressBanner({ progressPercent }: ProgressBannerProps) {
                 muted
                 playsInline
                 className="w-full h-full object-cover"
-                src="https://assets.mixkit.co/videos/37027/37027-720.mp4"
+                src="https://assets.mixkit.co/videos/23117/23117-720.mp4"
                 onTimeUpdate={handleTimeUpdate}
               />
               {/* Grey preview overlay */}
