@@ -30,6 +30,7 @@ function getTodayLabel(locale: string) {
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabKey>("tab_overview");
   const [mounted, setMounted] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const t = useT();
   const dateLocale = useDateLocale();
   const { lang, isTransitioning } = useLanguage();
@@ -40,20 +41,42 @@ export default function App() {
   }, []);
 
   return (
-    // Root: flex-row so LeftRail sits beside the scrollable content area
-    <div className="flex min-h-screen bg-grey-25">
+    // Mobile: flex-col (NavBar stacks above content). Desktop (md+): flex-row (LeftRail beside content).
+    <div className="flex flex-col md:flex-row min-h-screen bg-grey-25">
 
       {/* Mobile top bar (md:hidden) */}
-      <NavBar />
+      <NavBar onMenuClick={() => setMobileNavOpen(true)} />
 
-      {/* Desktop left rail (hidden on mobile) */}
-      <LeftRail />
+      {/* Desktop left rail (hidden on mobile) + mobile drawer overlay */}
+      <LeftRail isMobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
 
       {/* Main content column — scrolls independently of the rail */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
       {isTransitioning ? <SkeletonScreen /> : <div key={lang} className="contents animate-entrance">
 
-        {/* ── Digest header ── */}
+        {/* ── Mobile greeting strip (below NavBar, hidden on desktop) ── */}
+        <div className="md:hidden flex items-center justify-between gap-12 bg-white border-b border-grey-100 px-16 py-12 flex-shrink-0">
+          <div className="flex flex-col gap-2">
+            <p className="cds-body-tertiary text-grey-600">{getTodayLabel(dateLocale)}</p>
+            <p className="cds-subtitle-sm text-grey-975">{t("greeting_morning_name")}</p>
+          </div>
+          <div className="flex items-center gap-8 flex-shrink-0">
+            {/* Streak chip */}
+            <div className="flex items-center gap-4 px-10 py-4 bg-yellow-50 rounded-32">
+              <span
+                className="material-symbols-rounded text-yellow-800 flex-shrink-0"
+                style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}
+              >
+                bolt
+              </span>
+              <span className="cds-body-tertiary text-yellow-800 whitespace-nowrap">
+                {t("streak_days")}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Digest header (desktop only) ── */}
         <header className="hidden md:flex items-center justify-between gap-24 bg-white border-b border-grey-100 px-32 py-16 flex-shrink-0">
           <div className="flex flex-col gap-2">
             <p className="cds-body-tertiary text-grey-600">{getTodayLabel(dateLocale)}</p>
@@ -264,7 +287,7 @@ export default function App() {
                                 alt=""
                                 className={
                                   cert.localLogo
-                                    ? "absolute inset-0 w-full h-full object-cover scale-[1.35]"
+                                    ? "absolute inset-0 w-full h-full object-cover scale-150"
                                     : "w-full h-full object-contain p-8"
                                 }
                               />

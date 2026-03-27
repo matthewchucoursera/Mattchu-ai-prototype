@@ -7,7 +7,16 @@ export function SkeletonScreen() {
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-      {/* ── Header skeleton ── */}
+      {/* ── Mobile greeting strip skeleton (md:hidden) ── */}
+      <div className="md:hidden flex items-center justify-between gap-12 bg-white border-b border-grey-100 px-16 py-12 flex-shrink-0">
+        <div className="flex flex-col gap-6">
+          <Bone className="h-12 w-[100px] rounded-full" />
+          <Bone className="h-14 w-[160px] rounded-full" />
+        </div>
+        <Bone className="h-28 w-[90px] rounded-32" />
+      </div>
+
+      {/* ── Desktop header skeleton (hidden on mobile) ── */}
       <div className="hidden md:flex items-center justify-between gap-24 bg-white border-b border-grey-100 px-32 py-16 flex-shrink-0 h-64">
         <div className="flex flex-col gap-8">
           <Bone className="h-12 w-[120px] rounded-full" />

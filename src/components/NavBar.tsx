@@ -1,6 +1,10 @@
 import { ASSETS } from "../data/mockData";
 
-export function NavBar() {
+interface NavBarProps {
+  onMenuClick?: () => void;
+}
+
+export function NavBar({ onMenuClick }: NavBarProps) {
   return (
     // Mobile-only top bar — hidden on md and above (LeftRail handles desktop)
     <nav className="md:hidden sticky top-0 z-50 bg-white border-b border-grey-100">
@@ -8,6 +12,7 @@ export function NavBar() {
         <div className="flex items-center gap-12">
           <button
             aria-label="Open menu"
+            onClick={onMenuClick}
             className="flex items-center justify-center size-20 text-grey-975 flex-shrink-0"
           >
             <span className="material-symbols-rounded" style={{ fontSize: 20 }}>

@@ -150,7 +150,7 @@ export const skillDomains = [
 // ─── Assets ───────────────────────────────────────────────────────────────────
 
 export const ASSETS = {
-  courseraLogo: "https://www.figma.com/api/mcp/asset/5e651512-f2a9-455b-9e75-5c75c9f3efb3",
+  courseraLogo: "/coursera-logo.svg",
   coursePreview: "https://www.figma.com/api/mcp/asset/c214ae2f-98c7-4b6c-b0b3-74379c5b0835",
   rocketIcon: "https://www.figma.com/api/mcp/asset/460abfc5-6734-459c-bf83-0201facd77df",
   googleLogo: "https://www.figma.com/api/mcp/asset/4f5e211b-1bbe-4ecb-a1f6-af971b5a7fd6",
