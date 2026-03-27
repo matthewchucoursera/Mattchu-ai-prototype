@@ -303,7 +303,7 @@ export function LeftRail({ isMobileOpen = false, onMobileClose }: LeftRailProps)
       <aside
         className="hidden md:flex flex-col flex-shrink-0 bg-white border-r border-grey-100 h-screen sticky top-0 overflow-hidden z-40"
         style={{
-          width: isExpanded ? 240 : 80,
+          width: isExpanded ? 240 : 96,
           transition: "width 225ms ease",
         }}
       >
